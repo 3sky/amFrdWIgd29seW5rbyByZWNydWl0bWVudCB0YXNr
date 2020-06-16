@@ -31,11 +31,11 @@ jobs:
       - name: push image
         run: docker push gcr.io/${{ secrets.PROJECT_ID }}/$APP_NAME:${{ github.sha }}
 
-  deploy-to-stg:
+  deploy-to-cloud:
     needs: build-the-app
     runs-on: ubuntu-latest
     steps:
-      - name: update prod
+      - name: update app
         uses: 3sky/furry-octo-parakeet@master
         with:
           auth_file: ${{ secrets.GCP_SA_KEY }}

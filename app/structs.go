@@ -33,3 +33,11 @@ type App struct {
 	Cache cache.Cache
 	Url   string
 }
+
+type InfoMessage struct {
+	Message string
+}
+
+type Resposnse struct {
+	Result []interface{}
+}

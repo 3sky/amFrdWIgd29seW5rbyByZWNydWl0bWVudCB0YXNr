@@ -19,14 +19,6 @@ var (
 	URL string = "https://api.openweathermap.org/data/2.5/weather"
 )
 
-type InfoMessage struct {
-	Message string
-}
-
-type Resposnse struct {
-	Result []interface{}
-}
-
 func main() {
 
 	var appid string
