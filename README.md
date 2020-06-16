@@ -1,4 +1,4 @@
-# Golang Wather App
+# Golang Waether App
 
 ## How to
 
@@ -27,4 +27,14 @@
     ```
 
 - Commit new tag to run CI/CD pipeline
-- APPID is environment variable
+
+    ```bash
+    # for docker build
+    # everything without tag started by `v`
+    git push
+    # for deploy to Cloud Run
+    # tag started by `v`
+    git push origin v0.0.1
+    ```
+
+- APPID is set as  environment variable in Cloud Run manifest
