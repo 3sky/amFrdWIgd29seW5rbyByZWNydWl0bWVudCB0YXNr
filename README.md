@@ -1,6 +1,6 @@
-# Golang Waether App
+# Golang Weather App
 
-## How to
+## How implementation proces looks
 
 - Go mod
 
