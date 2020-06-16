@@ -1,5 +1,5 @@
 ---
-name: Build from master
+name: Release app
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
       - name: auth to CR
         run: gcloud auth configure-docker
       - name: build app
-        run: docker build . -t $APP_NAME
+        run: docker build -t $APP_NAME -f $(pwd)/app/Dockerfile $(pwd)/app
       - name: tag app
         run: docker tag $APP_NAME gcr.io/${{ secrets.PROJECT_ID }}/$APP_NAME:${{ github.sha }}
       - name: push image
