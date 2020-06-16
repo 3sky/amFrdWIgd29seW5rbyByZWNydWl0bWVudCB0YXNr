@@ -1,0 +1,15 @@
+---
+name: Release app
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '!v*'
+jobs:
+  build-the-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build app
+        run: docker build . -t test-app

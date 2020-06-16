@@ -1,0 +1,45 @@
+---
+name: Build from master
+
+on:
+  push:
+    tags:
+      - 'v*'
+env:
+  SERVICE: "weather-app"
+  URL: "weather-app-amqefe6t5a-ew.a.run.app"
+  APP_NAME: "weather_app"
+
+jobs:
+  build-the-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup GCP
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '281.0.0'
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+      - name: auth to CR
+        run: gcloud auth configure-docker
+      - name: build app
+        run: docker build . -t $APP_NAME
+      - name: tag app
+        run: docker tag $APP_NAME gcr.io/${{ secrets.PROJECT_ID }}/$APP_NAME:${{ github.sha }}
+      - name: push image
+        run: docker push gcr.io/${{ secrets.PROJECT_ID }}/$APP_NAME:${{ github.sha }}
+
+  deploy-to-stg:
+    needs: build-the-app
+    runs-on: ubuntu-latest
+    steps:
+      - name: update prod
+        uses: 3sky/furry-octo-parakeet@master
+        with:
+          auth_file: ${{ secrets.GCP_SA_KEY }}
+          action: 'update'
+          name: ${{ env.SERVICE }}
+          region: 'europe-west1'
+          image: "gcr.io/${{ secrets.PROJECT_ID }}/${{ env.APP_NAME }}:${{ github.sha }}"
